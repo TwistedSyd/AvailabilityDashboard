@@ -27,12 +27,13 @@
           </p-button>
           </div>
         <div v-if="error !== null" class="alert alert-danger">
-            <span>{{error}}</span>
+          <span>{{error}}</span>
         </div>
         </card>
       </div>
     </div>
 </template>
+
 <script>
 import firebase from 'firebase';
 
@@ -49,6 +50,7 @@ export default {
   components: {
   },
   created() {
+    /* Check to see if the user is logged in, if so push user to dashboard page */
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
             this.isAuthenticated = true
@@ -57,6 +59,7 @@ export default {
     })
   },
   methods: {
+    /* Log user into Firebase/Firestore auth */
     logIn(){
       console.log("Login");
       firebase.auth().signInWithEmailAndPassword(this.email, this.password)

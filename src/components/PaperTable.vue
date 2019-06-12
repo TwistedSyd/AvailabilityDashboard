@@ -53,7 +53,13 @@ export default {
       availableBuilders: []
     }
   },
+  computed: {
+    tableClass() {
+      return `table-${this.type}`;
+    }
+  },
   created() {
+    /* Pull names of all available builders from database */
     this.ref.onSnapshot((querySnapshot) => {
       this.availableBuilders = [];
       querySnapshot.forEach((doc) => {
@@ -80,11 +86,6 @@ export default {
       default: ""
     }
   },
-  computed: {
-    tableClass() {
-      return `table-${this.type}`;
-    }
-  },
   methods: {
     hasValue(item, column) {
       return item[column.toLowerCase()] !== "undefined";
@@ -92,6 +93,7 @@ export default {
     itemValue(item, column) {
       return item[column.toLowerCase()];
     },
+    /* Assign a task to a builders name, update stats respectively */
     assignBuilder(builder, id, type) {
       db.collection("tasks").doc(id).update({
         assign: builder
@@ -108,6 +110,8 @@ export default {
         });
       }
     },
+    /* Remove task from list with modal confirmation
+        update database stats accordingly */
     removeTask(id, type) {
       console.log("Checking: " + id);
       this.$bvModal.msgBoxConfirm("Are you sure you want to delete this task?", {
@@ -140,6 +144,7 @@ export default {
           console.log("There was an error.");
         })
     },
+    /* Remove an assigned builder, change builder to '' */
     reassignTask(id, type) {
       db.collection("tasks").doc(id).update({
         assign: ''

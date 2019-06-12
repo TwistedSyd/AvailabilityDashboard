@@ -6,16 +6,15 @@ import PaperDashboard from "./plugins/paperDashboard";
 import "vue-notifyjs/themes/default.css";
 import ToggleSwitch from "vuejs-toggle-switch";
 
-
 /* Import firebase, firestore, and vuefire */
 import VueFire from "vuefire";
 import firebase from "firebase";
 import "firebase/firestore";
 
-import { VBTooltip } from "bootstrap-vue";
+/* Use bootstrap plugin */
 import { ModalPlugin } from "bootstrap-vue";
 Vue.use(ModalPlugin);
-Vue.directive("b-tooltip", VBTooltip);
+
 /* Initialize firebase database */
 Vue.config.productionTip = false;
 Vue.use(VueFire);
@@ -36,8 +35,6 @@ firebase.initializeApp(firebaseConfig);
 /* Get database ready to use */
 export const db = firebase.firestore();
 
-
-/* eslint-disable no-new */
 new Vue({
   router,
   render: h => h(App)

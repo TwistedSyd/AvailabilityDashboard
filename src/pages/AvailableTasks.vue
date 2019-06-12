@@ -27,6 +27,7 @@
       </b-modal>
    </div>
 </template>
+
 <script>
 import { PaperTable } from "@/components";
 import firebase from "firebase";
@@ -68,6 +69,8 @@ export default {
     };
   },
   created() {
+    /* Finds tasks in database and filters them 
+        by what tasks are already assigned to a builder */
     this.dataRef.onSnapshot((querySnapshot) => {
       this.table1.data = [];
       this.table2.data = [];
@@ -97,6 +100,7 @@ export default {
     });
   },
   methods: {
+    /* Takes input from user and adds task in Firebase/Firestore */
     addTask() {
       const increment = firebase.firestore.FieldValue.increment(1);
       db.collection("tasks").add(this.task);
@@ -112,6 +116,7 @@ export default {
         });
       }
     },
+    /* Clears current task for the nest add task function */
     clearTask() {
       this.task.client = '';
       this.task.type = '';

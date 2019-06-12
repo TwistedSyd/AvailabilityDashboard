@@ -2,11 +2,6 @@
   <div class="sidebar"
        :data-background-color="backgroundColor"
        :data-active-color="activeColor">
-    <!--
-            Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black | darkblue"
-            Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
-        -->
-    <!-- -->
     <div class="sidebar-wrapper" id="style-3">
       <div class="logo">
         <a href="#" class="simple-text">
@@ -20,7 +15,8 @@
 
       </slot>
       <ul class="nav">
-        <!--By default vue-router adds an active class to each route link. This way the links are colored when clicked-->
+        <!-- By default vue-router adds an active class to each route link. 
+          This way the links are colored when clicked -->
         <slot name="links">
           <sidebar-link v-for="(link,index) in sidebarLinks"
                         :key="index"
@@ -170,6 +166,7 @@ export default {
     });
   },
   updated() {
+    /* Check if user is logged in, if not push to login page */
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
           this.isAuthenticated = true;
@@ -181,6 +178,9 @@ export default {
     if(this.isAuthenticated){
       this.currentUser = firebase.auth().currentUser.email;
     };
+    /* Check if the current user is a builder, 
+        if so update current user data, 
+        if not do nothing */
     if(this.currentUser != ""){
       this.refUser.doc(this.currentUser).get()
         .then((doc) => {
@@ -220,6 +220,7 @@ export default {
         this.links.splice(index, 1);
       }
     },
+    /* Update the availability of the current user (if they are a builder) */
     updateAvailable(availableValue) {
       if(availableValue == "Yes" && this.currentUser != ""){
         db.collection("builders").doc(this.currentUser).update({

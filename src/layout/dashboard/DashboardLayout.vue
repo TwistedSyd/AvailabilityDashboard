@@ -20,8 +20,7 @@
     </div>
   </div>
 </template>
-<style lang="scss">
-</style>
+
 <script>
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
@@ -49,3 +48,6 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+</style>

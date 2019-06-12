@@ -1,8 +1,7 @@
+/* Import general views */
 import DashboardLayout from "@/layout/dashboard/DashboardLayout.vue";
-// GeneralViews
-import NotFound from "@/pages/NotFoundPage.vue";
 
-// Admin pages
+/* Usefule/interactive pages */
 import Dashboard from "@/pages/Dashboard.vue";
 import AvailableTasks from "@/pages/AvailableTasks.vue";
 import Login from "@/pages/Login.vue";
@@ -30,7 +29,7 @@ const routes = [
       }
     ]
   },
-  { path: "*", component: NotFound }
+  { path: "*", component: DashboardLayout, redirect: "/dashboard" }
 ];
 
 /**

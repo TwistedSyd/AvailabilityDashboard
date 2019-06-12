@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!--Stats cards-->
+    <!--Build stats cards-->
     <div class="row">
       <div class="col-md-6 col-xl-3" v-for="stats in statsCards" :key="stats.title">
         <stats-card>
@@ -45,27 +45,28 @@
     </div>
   </div>
 </template>
+
 <script>
 import { StatsCard, ChartCard } from "@/components/index";
 import Chartist from 'chartist';
 import firebase from 'firebase';
 import { db } from '../main';
 
-
 export default {
-  /**
-   * Chart data used to render stats, charts. Should be replaced with server data
-   */
+  /* Data used to fill stats cards, pulled in from Firebase/Firestore */
   data() {
     return {
       refInfo: db.collection("info").doc("build-stats"),
       refAvailable: db.collection("builders").where("available", "==", true),
       refNot: db.collection("builders").where("available", "==", false),
       info: [],
+      availableBuilders: [],
+      notAvailable: [],
       dividers: {
         available: "Available Builders",
         busy: "Busy Builders"
       },
+      /* Stats cards are hard coded except for their values */
       statsCards: [
         {
           type: "success",
@@ -99,12 +100,11 @@ export default {
           footerText: "Number of tasks not classified\nas build.",
           footerIcon: "ti-info"
         }
-      ],
-      availableBuilders: [],
-      notAvailable: []
+      ]
     };
   },
   created() {
+    /* Get stats information from Firebase/Firestore, store in stats cards */
     this.refInfo.get()
       .then((doc) => {
         if(doc.exists){
@@ -114,8 +114,9 @@ export default {
           this.statsCards[3].value = doc.data().other;
         }else{
           alert("No such document!");
-        }
+        };
       });
+    /* Get builders with availability and store */
     this.refAvailable.onSnapshot((querySnapshot) => {
       this.availableBuilders = [];
       this.statsCards[0].value = 0;
@@ -130,6 +131,7 @@ export default {
         });
       });
     });
+    /* Get builders without availability and store */
     this.refNot.onSnapshot((querySnapshot) => {
       this.notAvailable = [];
       querySnapshot.forEach((doc) => {

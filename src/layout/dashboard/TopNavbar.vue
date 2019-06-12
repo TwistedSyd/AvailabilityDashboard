@@ -32,16 +32,25 @@
       </div>
     </div></nav>
 </template>
+
 <script>
 import firebase from 'firebase';
 
 export default {
+  data() {
+    return {
+      activeNotifications: false,
+      isAuthenticated: false,
+      currentUser: ""
+    };
+  },
   computed: {
     routeName() {
       const { name } = this.$route;
       return this.capitalizeFirstLetter(name);
     }
   },
+  /* Check is user is logged in, if not push to login page */
   created() {
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
@@ -62,13 +71,6 @@ export default {
     if(this.isAuthenticated){
       this.currentUser = firebase.auth().currentUser.email;
     }
-  },
-  data() {
-    return {
-      activeNotifications: false,
-      isAuthenticated: false,
-      currentUser: ""
-    };
   },
   methods: {
     capitalizeFirstLetter(string) {
@@ -101,6 +103,7 @@ export default {
   }
 };
 </script>
+
 <style>
 #user {
   padding-right: 15px;
