@@ -134,12 +134,11 @@ export default {
    overflow: hidden;
 }
 .over {
-   position: absolute;
-   z-index: 5; 
+  position: inherit;
+  z-index: 10;
 }
 .under {
-   position: absolute;
-   z-index: 0;
+  position: inherit;
 }
 #add-task-button {
    margin: 20px !important;

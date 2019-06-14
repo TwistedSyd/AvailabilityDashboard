@@ -2,7 +2,7 @@
     <div class="row">
       <div class="col-12 over">
         <card id="login-card">
-          <h1 id="title">Login</h1>
+          <h1 id="title">Login:</h1>
           <div class="row">
             <div class="col-md-6 login-input">
               <fg-input type="email"
