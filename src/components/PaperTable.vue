@@ -193,4 +193,7 @@ export default {
 .modal-backdrop {
   background-color: rgba(0, 0, 0, 0.5) !important;
 }
+.modal-content {
+  background-color:#f4f3ef !important;
+}
 </style>

@@ -132,7 +132,7 @@ export default {
           backgroundColor: 'gray',
           selectedColor: 'white',
           selectedBackgroundColor: 'green',
-          borderColor: '#68B3C8',
+          borderColor: '#fff',
           fontFamily: 'Arial',
           fontWeight: 'bold',
           fontWeightSelected: 'bold',

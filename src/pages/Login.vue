@@ -1,7 +1,7 @@
 <template>
     <div class="row">
       <div class="col-12 over">
-        <card>
+        <card id="login-card">
           <h1 id="title">Login</h1>
           <div class="row">
             <div class="col-md-6 login-input">
@@ -78,5 +78,8 @@ export default {
   border-bottom: 1px solid rgb(105, 105, 105);
   text-align: left;
   padding-bottom: 5px;
+}
+#login-card {
+  background-color: rgb(247, 247, 247) !important;
 }
 </style>

@@ -144,4 +144,5 @@ export default {
 #add-task-button {
    margin: 20px !important;
 }
+
 </style>
