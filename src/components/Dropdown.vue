@@ -21,15 +21,6 @@
 </template>
 <script>
 export default {
-  props: {
-    tag: {
-      type: String,
-      default: "li"
-    },
-    title: String,
-    icon: String,
-    titleClasses: [String, Object, Array]
-  },
   data() {
     return {
       isOpen: false
@@ -44,6 +35,15 @@ export default {
       this.isOpen = false;
       this.$emit('change', false);
     }
+  },
+  props: {
+    tag: {
+      type: String,
+      default: "li"
+    },
+    title: String,
+    icon: String,
+    titleClasses: [String, Object, Array]
   }
 };
 </script>

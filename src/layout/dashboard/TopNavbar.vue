@@ -37,13 +37,6 @@
 import firebase from 'firebase';
 
 export default {
-  data() {
-    return {
-      activeNotifications: false,
-      isAuthenticated: false,
-      currentUser: ""
-    };
-  },
   computed: {
     routeName() {
       const { name } = this.$route;
@@ -60,17 +53,12 @@ export default {
         }
     })
   },
-  updated() {
-    firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          this.isAuthenticated = true;
-        }else{
-          this.$router.push('/login');
-        }
-    })
-    if(this.isAuthenticated){
-      this.currentUser = firebase.auth().currentUser.email;
-    }
+  data() {
+    return {
+      activeNotifications: false,
+      isAuthenticated: false,
+      currentUser: ""
+    };
   },
   methods: {
     capitalizeFirstLetter(string) {
@@ -99,6 +87,19 @@ export default {
           this.isAuthenticated = false;
           this.$router.push('/login');
         })
+    }
+  },
+  updated() {
+    /* Regularly check to see if the user is logged in */
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.isAuthenticated = true;
+        }else{
+          this.$router.push('/login');
+        }
+    })
+    if(this.isAuthenticated){
+      this.currentUser = firebase.auth().currentUser.email;
     }
   }
 };

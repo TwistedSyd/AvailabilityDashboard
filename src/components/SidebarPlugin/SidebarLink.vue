@@ -27,14 +27,6 @@ export default {
       default: ()=>{}
     }
   },
-  props: {
-    name: String,
-    icon: String,
-    tag: {
-      type: String,
-      default: "router-link"
-    }
-  },
   methods: {
     hideSidebar() {
       if (this.autoClose) {
@@ -56,6 +48,14 @@ export default {
     }
     if (this.removeLink) {
       this.removeLink(this);
+    }
+  },
+  props: {
+    name: String,
+    icon: String,
+    tag: {
+      type: String,
+      default: "router-link"
     }
   }
 };

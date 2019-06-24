@@ -28,17 +28,17 @@ import DashboardContent from "./Content.vue";
 import MobileMenu from "./MobileMenu";
 
 export default {
-   data() {
-      return {
-         isAuthenticated: false
-      };
-   },
   components: {
     TopNavbar,
     ContentFooter,
     DashboardContent,
     MobileMenu
   },
+  data() {
+      return {
+         isAuthenticated: false
+      };
+   },
   methods: {
     toggleSidebar() {
       if (this.$sidebar.showSidebar) {

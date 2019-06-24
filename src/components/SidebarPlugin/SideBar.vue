@@ -50,49 +50,6 @@ import { db } from "../../main" ;
 
 
 export default {
-  props: {
-    title: {
-      type: String,
-      default: "Builder Availability"
-    },
-    backgroundColor: {
-      type: String,
-      default: "black",
-      validator: value => {
-        let acceptedValues = ["white", "black", "darkblue"];
-        return acceptedValues.indexOf(value) !== -1;
-      }
-    },
-    activeColor: {
-      type: String,
-      default: "info",
-      validator: value => {
-        let acceptedValues = [
-          "primary",
-          "info",
-          "success",
-          "warning",
-          "danger"
-        ];
-        return acceptedValues.indexOf(value) !== -1;
-      }
-    },
-    sidebarLinks: {
-      type: Array,
-      default: () => []
-    },
-    autoClose: {
-      type: Boolean,
-      default: true
-    }
-  },
-  provide() {
-    return {
-      autoClose: this.autoClose,
-      addLink: this.addLink,
-      removeLink: this.removeLink
-    };
-  },
   components: {
     MovingArrow,
     SidebarLink
@@ -105,6 +62,15 @@ export default {
     arrowMovePx() {
       return this.linkHeight * this.activeLinkIndex;
     }
+  },
+  created() {
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.isAuthenticated = true;
+        }else{
+          this.$router.push('/login');
+        }
+    })
   },
   data() {
     return {
@@ -151,19 +117,89 @@ export default {
       }
     };
   },
-  created() {
-    firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          this.isAuthenticated = true;
-        }else{
-          this.$router.push('/login');
+
+methods: {
+    findActiveLink() {
+      this.links.forEach((link, index) => {
+        if (link.isActive()) {
+          this.activeLinkIndex = index;
         }
-    })
+      });
+    },
+    addLink(link) {
+      const index = this.$slots.links.indexOf(link.$vnode);
+      this.links.splice(index, 0, link);
+    },
+    removeLink(link) {
+      const index = this.links.indexOf(link);
+      if (index > -1) {
+        this.links.splice(index, 1);
+      }
+    },
+    /* Update the availability of the current user (if they are a builder) */
+    updateAvailable(availableValue) {
+      if(availableValue == "Yes" && this.currentUser != ""){
+        db.collection("builders").doc(this.currentUser).update({
+          available: true,
+          icon: "ti-hand-open",
+          type: "success"
+        });
+      }else if(availableValue == "No" && this.currentUser != ""){
+        db.collection("builders").doc(this.currentUser).update({
+          available: false,
+          icon: "ti-time",
+          type: "danger"
+        });
+      }
+    }
   },
   mounted() {
     this.$watch("$route", this.findActiveLink, {
       immediate: true
     });
+  },
+  props: {
+    title: {
+      type: String,
+      default: "Builder Availability"
+    },
+    backgroundColor: {
+      type: String,
+      default: "black",
+      validator: value => {
+        let acceptedValues = ["white", "black", "darkblue"];
+        return acceptedValues.indexOf(value) !== -1;
+      }
+    },
+    activeColor: {
+      type: String,
+      default: "info",
+      validator: value => {
+        let acceptedValues = [
+          "primary",
+          "info",
+          "success",
+          "warning",
+          "danger"
+        ];
+        return acceptedValues.indexOf(value) !== -1;
+      }
+    },
+    sidebarLinks: {
+      type: Array,
+      default: () => []
+    },
+    autoClose: {
+      type: Boolean,
+      default: true
+    }
+  },
+  provide() {
+    return {
+      autoClose: this.autoClose,
+      addLink: this.addLink,
+      removeLink: this.removeLink
+    };
   },
   updated() {
     /* Check if user is logged in, if not push to login page */
@@ -200,41 +236,6 @@ export default {
             this.isBuilder = false;
           }
         });
-    }
-  },
-  methods: {
-    findActiveLink() {
-      this.links.forEach((link, index) => {
-        if (link.isActive()) {
-          this.activeLinkIndex = index;
-        }
-      });
-    },
-    addLink(link) {
-      const index = this.$slots.links.indexOf(link.$vnode);
-      this.links.splice(index, 0, link);
-    },
-    removeLink(link) {
-      const index = this.links.indexOf(link);
-      if (index > -1) {
-        this.links.splice(index, 1);
-      }
-    },
-    /* Update the availability of the current user (if they are a builder) */
-    updateAvailable(availableValue) {
-      if(availableValue == "Yes" && this.currentUser != ""){
-        db.collection("builders").doc(this.currentUser).update({
-          available: true,
-          icon: "ti-hand-open",
-          type: "success"
-        });
-      }else if(availableValue == "No" && this.currentUser != ""){
-        db.collection("builders").doc(this.currentUser).update({
-          available: false,
-          icon: "ti-time",
-          type: "danger"
-        });
-      }
     }
   }
 };

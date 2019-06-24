@@ -1,7 +1,9 @@
+/* Need to import Vue */
 import Vue from "vue";
 import App from "./App";
 import router from "./router/index";
 
+/* Layout imports */
 import PaperDashboard from "./plugins/paperDashboard";
 import "vue-notifyjs/themes/default.css";
 import ToggleSwitch from "vuejs-toggle-switch";
@@ -15,7 +17,7 @@ import "firebase/firestore";
 import { ModalPlugin } from "bootstrap-vue";
 Vue.use(ModalPlugin);
 
-/* Initialize firebase database */
+/* Initialize firebase database and tell Vue what to use */
 Vue.config.productionTip = false;
 Vue.use(VueFire);
 Vue.use(PaperDashboard);

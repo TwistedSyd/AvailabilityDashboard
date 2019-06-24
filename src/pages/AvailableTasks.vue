@@ -41,33 +41,6 @@ export default {
   components: {
     PaperTable
   },
-  data() {
-    return {
-      dataRef: db.collection("tasks"),
-      showAddForm: false,
-      task: {
-        client: '',
-        type: '',
-        link: '',
-        locations: 0,
-        pm: '',
-        assign: ''
-      },
-      table1: {
-        title: "Available Tasks",
-        subTitle: "Available tasks for builders to grab when they have extra time",
-        titles: [...column1Titles],
-        columns: [...tableColumns],
-        data: []
-      },
-      table2: {
-         title: "Assigned Tasks",
-         subTitle: "Tasks that are currently being worked on (will be deleted in 48 hours)",
-         titles: [...column2Titles],
-         data: []
-      }
-    };
-  },
   created() {
     /* Finds tasks in database and filters them 
         by what tasks are already assigned to a builder */
@@ -98,6 +71,34 @@ export default {
         };
       });
     });
+  },
+  data() {
+    /* Data used for filling in task tables */
+    return {
+      dataRef: db.collection("tasks"),
+      showAddForm: false,
+      task: {
+        client: '',
+        type: '',
+        link: '',
+        locations: 0,
+        pm: '',
+        assign: ''
+      },
+      table1: {
+        title: "Available Tasks",
+        subTitle: "Available tasks for builders to grab when they have extra time",
+        titles: [...column1Titles],
+        columns: [...tableColumns],
+        data: []
+      },
+      table2: {
+         title: "Assigned Tasks",
+         subTitle: "Tasks that are currently being worked on (will be deleted in 48 hours)",
+         titles: [...column2Titles],
+         data: []
+      }
+    };
   },
   methods: {
     /* Takes input from user and adds task in Firebase/Firestore */

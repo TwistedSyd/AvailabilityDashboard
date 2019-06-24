@@ -39,16 +39,6 @@ import firebase from 'firebase';
 
 export default {
   name: "login",
-  data(){
-    return {
-      email: '',
-      password: '',
-      isAuthenticated: false,
-      error: null,
-    }
-  },
-  components: {
-  },
   created() {
     /* Check to see if the user is logged in, if so push user to dashboard page */
     firebase.auth().onAuthStateChanged(user => {
@@ -57,6 +47,14 @@ export default {
             this.$router.push('/dashboard')
         }
     })
+  },
+  data(){
+    return {
+      email: '',
+      password: '',
+      isAuthenticated: false,
+      error: null,
+    }
   },
   methods: {
     /* Log user into Firebase/Firestore auth */

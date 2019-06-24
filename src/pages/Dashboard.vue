@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!--Build stats cards-->
     <div class="row">
       <div class="col-md-6 col-xl-3" v-for="stats in statsCards" :key="stats.title">
         <stats-card>
@@ -53,8 +52,54 @@ import firebase from 'firebase';
 import { db } from '../main';
 
 export default {
-  /* Data used to fill stats cards, pulled in from Firebase/Firestore */
+  components: {
+    StatsCard,
+    ChartCard
+  },
+  created() {
+    /* Get stats information from Firebase/Firestore, store in stats cards */
+    this.refInfo.get()
+      .then((doc) => {
+        if(doc.exists){
+          this.info = doc.data();
+          this.statsCards[1].value = doc.data().total;
+          this.statsCards[2].value = doc.data().build;
+          this.statsCards[3].value = doc.data().other;
+        }else{
+          alert("No such document!");
+        };
+      });
+    /* Get builders with availability and store */
+    this.refAvailable.onSnapshot((querySnapshot) => {
+      this.availableBuilders = [];
+      this.statsCards[0].value = 0;
+      querySnapshot.forEach((doc) => {
+        this.statsCards[0].value++;
+        this.availableBuilders.push({
+          name: doc.data().name,
+          available: doc.data().available,
+          icon: doc.data().icon,
+          type: doc.data().type,
+          email: doc.data().email
+        });
+      });
+    });
+    /* Get builders without availability and store */
+    this.refNot.onSnapshot((querySnapshot) => {
+      this.notAvailable = [];
+      querySnapshot.forEach((doc) => {
+        this.notAvailable.push({
+          name: doc.data().name,
+          available: doc.data().available,
+          icon: doc.data().icon,
+          type: doc.data().type,
+          email: doc.data().email
+        });
+      });
+    });
+  },
   data() {
+    /* Data used to fill stats cards, pulled in from Firebase/Firestore */
     return {
       refInfo: db.collection("info").doc("build-stats"),
       refAvailable: db.collection("builders").where("available", "==", true),
@@ -102,52 +147,6 @@ export default {
         }
       ]
     };
-  },
-  created() {
-    /* Get stats information from Firebase/Firestore, store in stats cards */
-    this.refInfo.get()
-      .then((doc) => {
-        if(doc.exists){
-          this.info = doc.data();
-          this.statsCards[1].value = doc.data().total;
-          this.statsCards[2].value = doc.data().build;
-          this.statsCards[3].value = doc.data().other;
-        }else{
-          alert("No such document!");
-        };
-      });
-    /* Get builders with availability and store */
-    this.refAvailable.onSnapshot((querySnapshot) => {
-      this.availableBuilders = [];
-      this.statsCards[0].value = 0;
-      querySnapshot.forEach((doc) => {
-        this.statsCards[0].value++;
-        this.availableBuilders.push({
-          name: doc.data().name,
-          available: doc.data().available,
-          icon: doc.data().icon,
-          type: doc.data().type,
-          email: doc.data().email
-        });
-      });
-    });
-    /* Get builders without availability and store */
-    this.refNot.onSnapshot((querySnapshot) => {
-      this.notAvailable = [];
-      querySnapshot.forEach((doc) => {
-        this.notAvailable.push({
-          name: doc.data().name,
-          available: doc.data().available,
-          icon: doc.data().icon,
-          type: doc.data().type,
-          email: doc.data().email
-        });
-      });
-    });
-  },
-  components: {
-    StatsCard,
-    ChartCard
   }
 };
 </script>

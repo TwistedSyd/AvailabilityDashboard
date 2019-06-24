@@ -47,12 +47,6 @@ const increment = firebase.firestore.FieldValue.increment(1);
 
 export default {
   name: 'paper-table',
-  data() {
-    return {
-      ref: db.collection("builders"),
-      availableBuilders: []
-    }
-  },
   computed: {
     tableClass() {
       return `table-${this.type}`;
@@ -69,21 +63,10 @@ export default {
       });
     });
   },
-  props: {
-    titles: Array,
-    columns: Array,
-    data: Array,
-    type: {
-      type: String, // striped | hover
-      default: "striped"
-    },
-    title: {
-      type: String,
-      default: ""
-    },
-    subTitle: {
-      type: String,
-      default: ""
+  data() {
+    return {
+      ref: db.collection("builders"),
+      availableBuilders: []
     }
   },
   methods: {
@@ -161,6 +144,23 @@ export default {
         });
       }
     },
+  },
+  props: {
+    titles: Array,
+    columns: Array,
+    data: Array,
+    type: {
+      type: String, // striped | hover
+      default: "striped"
+    },
+    title: {
+      type: String,
+      default: ""
+    },
+    subTitle: {
+      type: String,
+      default: ""
+    }
   }
 };
 </script>
