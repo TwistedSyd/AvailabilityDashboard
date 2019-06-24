@@ -1,8 +1,8 @@
 # Availability Dashboad 
 
-> Availaility dashboard based on paper dashboard UI template + vue-router
+> Availaility dashboard based on paper dashboard UI template
 
-This project is: 
+This project is: A tool meant for keeping track of tasks.
 
 ## Documentation
 
@@ -21,10 +21,7 @@ npm run dev
 ```
 npm run build
 ```
-### lint
-```
-npm run lint
-```
+
 ## Contribution guide
 * Fork the repository
 * `npm install` or `yarn install`
