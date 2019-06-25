@@ -18,12 +18,14 @@
             </div>
          </card>
       </div>
-      <b-modal @ok="addTask" @hidden="clearTask" v-model="showAddForm" centered title="Add New Task" id="add-task-modal">
-        <fg-input type="text" v-model="task.client" placeholder="Client"></fg-input>
-        <fg-input type="text" v-model="task.type" placeholder="Task Type (i.e. Build)"></fg-input>
-        <fg-input type="text" v-model="task.link" placeholder="Liquid Planner Link"></fg-input>
-        <fg-input type="number" v-model="task.locations" placeholder="# of locations"></fg-input>
-        <fg-input type="text" v-model="task.pm" placeholder="Name of PM"></fg-input>
+      <b-modal @cancel="cancelNotif" @ok="addTask" @hidden="clearTask" v-model="showAddForm" centered title="Add New Task" id="add-task-modal">
+        <form>
+          <fg-input required="true" type="text" v-model="task.client" placeholder="Client"></fg-input>
+          <fg-input type="text" v-model="task.type" placeholder="Task Type (i.e. Build)"></fg-input>
+          <fg-input type="text" v-model="task.link" pattern="(http:\/\/|https:\/\/)?(app.liquidplanner.com)(\/.*)?" placeholder="Liquid Planner Link"></fg-input>
+          <fg-input onfocus="this.type='number';" v-model="task.locations" placeholder="# of locations"></fg-input>
+          <fg-input type="text" v-model="task.pm" placeholder="Name of PM"></fg-input>
+        </form>
       </b-modal>
    </div>
 </template>
@@ -32,6 +34,9 @@
 import { PaperTable } from "@/components";
 import firebase from "firebase";
 import { db } from "../main";
+import AddNotification from "./Notifications/AddNotification";
+import CancelNotification from "./Notifications/CancelNotification";
+import NotificationTamplate from "./Notifications/NotificationTemplate";
 
 const column1Titles = ["Client", "Type", "LP Link", "# of Locations", "PM", "Assign Builder"];
 const column2Titles = ["Client", "Type", "LP Link", "# of Locations", "PM", "Assigned Builder"];
@@ -116,6 +121,12 @@ export default {
           other: increment
         });
       }
+      this.$notify({
+        component: AddNotification,
+        horizontalAlign: "right",
+        verticalAlign: "top",
+        type: "success"
+      });
     },
     /* Clears current task for the nest add task function */
     clearTask() {
@@ -125,6 +136,14 @@ export default {
       this.task.pm = '';
       this.task.locations = '';
       this.task.assign ='';
+    },
+    cancelNotif() {
+      this.$notify({
+        component: CancelNotification,
+        horizontalAlign: "right",
+        verticalAlign: "top",
+        type: "danger"
+      });
     }
   }
 };

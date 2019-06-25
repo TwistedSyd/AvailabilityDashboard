@@ -42,6 +42,11 @@
 <script>
 import firebase from "firebase";
 import { db } from "../main";
+import AssignNotification from "../pages/Notifications/AssignNotification";
+import UnassignNotification from "../pages/Notifications/UnassignNotification";
+import DeleteNotification from "../pages/Notifications/DeleteNotification";
+import CancelNotification from "../pages/Notifications/CancelNotification";
+
 const decrement = firebase.firestore.FieldValue.increment(-1);
 const increment = firebase.firestore.FieldValue.increment(1);
 
@@ -92,6 +97,12 @@ export default {
           other: decrement
         });
       }
+      this.$notify({
+        component: AssignNotification,
+        horizontalAlign: "right",
+        verticalAlign: "top",
+        type: "success"
+      });
     },
     /* Remove task from list with modal confirmation
         update database stats accordingly */
@@ -119,7 +130,19 @@ export default {
                 other: decrement
               });
             }
+            this.$notify({
+              component: DeleteNotification,
+              horizontalAlign: "right",
+              verticalAlign: "top",
+              type: "danger"
+            });
           }else{
+            this.$notify({
+              component: CancelNotification,
+              horizontalAlign: "right",
+              verticalAlign: "top",
+              type: "danger"
+            });
             console.log("Cancelling delete operation.");
           }
         })
@@ -143,6 +166,12 @@ export default {
           other: increment
         });
       }
+      this.$notify({
+        component: UnassignNotification,
+        horizontalAlign: "right",
+        verticalAlign: "top",
+        type: "info"
+      });
     },
   },
   props: {
