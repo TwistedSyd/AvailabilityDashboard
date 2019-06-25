@@ -15,6 +15,8 @@ import "firebase/firestore";
 
 /* Use bootstrap plugin */
 import { ModalPlugin } from "bootstrap-vue";
+import { FormGroupPlugin } from "bootstrap-vue";
+Vue.use(FormGroupPlugin);
 Vue.use(ModalPlugin);
 
 /* Initialize firebase database and tell Vue what to use */

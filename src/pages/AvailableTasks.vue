@@ -19,12 +19,12 @@
          </card>
       </div>
       <b-modal @cancel="cancelNotif" @ok="addTask" @hidden="clearTask" v-model="showAddForm" centered title="Add New Task" id="add-task-modal">
-        <form>
-          <fg-input required="true" type="text" v-model="task.client" placeholder="Client"></fg-input>
-          <fg-input type="text" v-model="task.type" placeholder="Task Type (i.e. Build)"></fg-input>
-          <fg-input type="text" v-model="task.link" pattern="(http:\/\/|https:\/\/)?(app.liquidplanner.com)(\/.*)?" placeholder="Liquid Planner Link"></fg-input>
-          <fg-input onfocus="this.type='number';" v-model="task.locations" placeholder="# of locations"></fg-input>
-          <fg-input type="text" v-model="task.pm" placeholder="Name of PM"></fg-input>
+        <form ref="form" @submit.stop.prevent="addTask">
+          <fg-input required type="text" v-model="task.client" placeholder="Client"></fg-input>
+          <fg-input required type="text" v-model="task.type" placeholder="Task Type (i.e. Build)"></fg-input>
+          <fg-input reqiured type="text" v-model="task.link" pattern="(http:\/\/|https:\/\/)?(app.liquidplanner.com)(\/.*)?" placeholder="Liquid Planner Link"></fg-input>
+          <fg-input required onfocus="this.type='number';" v-model="task.locations" placeholder="# of locations"></fg-input>
+          <fg-input required type="text" v-model="task.pm" placeholder="Name of PM"></fg-input>
         </form>
       </b-modal>
    </div>
@@ -36,6 +36,7 @@ import firebase from "firebase";
 import { db } from "../main";
 import AddNotification from "./Notifications/AddNotification";
 import CancelNotification from "./Notifications/CancelNotification";
+import RequiredNotification from "./Notifications/RequiredNotification";
 import NotificationTamplate from "./Notifications/NotificationTemplate";
 
 const column1Titles = ["Client", "Type", "LP Link", "# of Locations", "PM", "Assign Builder"];
@@ -82,6 +83,7 @@ export default {
     return {
       dataRef: db.collection("tasks"),
       showAddForm: false,
+      formState: null,
       task: {
         client: '',
         type: '',
@@ -106,11 +108,26 @@ export default {
     };
   },
   methods: {
+    checkForm(){
+      const valid = this.$refs.form.checkValidity();
+      this.formState = valid ? 'valid' : 'invalid'
+      return valid;
+    },
     /* Takes input from user and adds task in Firebase/Firestore */
-    addTask() {
+    addTask(e) {
+      e.preventDefault();
+      if(!this.checkForm()){
+        this.$notify({
+        component: RequiredNotification,
+        horizontalAlign: "center",
+        verticalAlign: "top",
+        type: "danger"
+      });
+        return
+      }
       const increment = firebase.firestore.FieldValue.increment(1);
       db.collection("tasks").add(this.task);
-      if(this.task.type.toUpperCase() === "BUILD"){
+      if(this.task.type.toUpperCase().includes("BUILD")){
         db.collection("info").doc("build-stats").update({
           total: increment,
           build: increment
@@ -127,6 +144,7 @@ export default {
         verticalAlign: "top",
         type: "success"
       });
+      this.showAddForm = false;
     },
     /* Clears current task for the nest add task function */
     clearTask() {
@@ -136,6 +154,7 @@ export default {
       this.task.pm = '';
       this.task.locations = '';
       this.task.assign ='';
+      this.formState = null;
     },
     cancelNotif() {
       this.$notify({
