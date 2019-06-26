@@ -19,6 +19,11 @@ import { FormGroupPlugin } from "bootstrap-vue";
 Vue.use(FormGroupPlugin);
 Vue.use(ModalPlugin);
 
+/* Use Vuetify Plugin */
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+Vue.use(Vuetify)
+
 /* Initialize firebase database and tell Vue what to use */
 Vue.config.productionTip = false;
 Vue.use(VueFire);

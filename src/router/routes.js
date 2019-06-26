@@ -5,6 +5,7 @@ import DashboardLayout from "@/layout/dashboard/DashboardLayout.vue";
 import Dashboard from "@/pages/Dashboard.vue";
 import AvailableTasks from "@/pages/AvailableTasks.vue";
 import Login from "@/pages/Login.vue";
+import Checklist from "@/pages/Checklist.vue"
 
 /* Define paths and names for each page */
 const routes = [
@@ -23,6 +24,11 @@ const routes = [
         name: "available-tasks",
         component: AvailableTasks
       },
+      {
+        path: "checklist",
+        name: "checklist",
+        component: Checklist
+    },
       {
         path: "login",
         name: "login",

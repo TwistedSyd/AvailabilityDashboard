@@ -4,6 +4,8 @@
       <template slot="links">
         <sidebar-link to="/dashboard" name="Dashboard" icon="ti-panel"/>
         <sidebar-link to="/available-tasks" name="Available Tasks" icon="ti-check-box"/>
+        <sidebar-link to="/checklist" name="Builder Checklist" icon="ti-menu-alt"/>
+
         
       </template>
       <mobile-menu>
